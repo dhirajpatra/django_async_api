@@ -14,6 +14,8 @@ class Movies(models.Model):
 
 class Theatres(models.Model):
     name = models.CharField(max_length=100)
+    # Foreign key
+    movies = models.ManyToManyField(Movies)
 
     def __str__(self):
         return self.name
