@@ -44,6 +44,7 @@ def get_theatres():
 def get_movies_async():
     try:
         print("Getting movies ...")
+        time.sleep(2)  # Simulating I/O operation
         qs = Movies.objects.all()
         print(qs)
         print("All movies fetched")
@@ -56,6 +57,7 @@ def get_movies_async():
 def get_theatres_async():
     try:
         print("Getting theatres ...")
+        time.sleep(5)  # Simulating I/O operation
         qs = Theatres.objects.all()
         print(qs)
         print("All theatres fetched")
@@ -91,8 +93,12 @@ def sync_view(request):
 async def async_view(request):
     try:
         start_time = time.time()
-        movies_response = await get_movies_async()
-        theatres_response = await get_theatres_async()
+        # Fetch movies and theatres concurrently using asyncio.gather
+        movies_response, theatres_response = await asyncio.gather(
+            get_movies_async(),
+            get_theatres_async()
+        )
+        # Unpack the results from the futures
         total = time.time() - start_time
         pretty_response = {
             "time_taken": total,
